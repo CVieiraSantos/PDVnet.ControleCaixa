@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PDVnet.ControleCaixa.Business\PDVnet.ControleCaixa.Business.csproj" />
+    <ProjectReference Include="..\PDVnet.ControleCaixa.Infra.Ioc\PDVnet.ControleCaixa.Infra.Ioc.csproj" />
+    <ProjectReference Include="..\PDVnet.ControleCaixa.Model\PDVnet.ControleCaixa.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.10" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.10" />
+  </ItemGroup>
+
+</Project>

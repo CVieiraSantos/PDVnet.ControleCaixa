@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="PDVnet.ControleCaixa.Business/PDVnet.ControleCaixa.Business.csproj" />
+  <Project Path="PDVnet.ControleCaixa.Data/PDVnet.ControleCaixa.Data.csproj" />
+  <Project Path="PDVnet.ControleCaixa.Infra.Ioc/PDVnet.ControleCaixa.Infra.Ioc.csproj" Id="dd3e0752-a280-404a-8495-2bea1444fc53" />
+  <Project Path="PDVnet.ControleCaixa.Model/PDVnet.ControleCaixa.Model.csproj" />
+  <Project Path="PDVnet.ControleCaixa.Tests/PDVnet.ControleCaixa.Tests.csproj" />
+  <Project Path="PDVnet.ControleCaixa.UI/PDVnet.ControleCaixa.UI.csproj" />
+</Solution>
