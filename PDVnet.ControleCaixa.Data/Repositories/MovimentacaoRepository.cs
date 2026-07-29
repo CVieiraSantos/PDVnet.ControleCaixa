@@ -4,6 +4,7 @@ using PDVnet.ControleCaixa.Data.Repositories.Interfaces;
 using PDVnet.ControleCaixa.Data.Repositories.Queries;
 using PDVnet.ControleCaixa.Model.Entities;
 using PDVnet.ControleCaixa.Model.Enums;
+using PDVnet.ControleCaixa.Model.Filters;
 using System.Data;
 
 namespace PDVnet.ControleCaixa.Data.Repositories
@@ -197,6 +198,47 @@ namespace PDVnet.ControleCaixa.Data.Repositories
 
                 Status = reader.GetBoolean(reader.GetOrdinal("Status"))
             };
+        }
+
+        public async Task<IReadOnlyList<Movimentacao>> PesquisarAsync(MovimentacaoFiltro filtro)
+        {
+            List<Movimentacao> movimentacoes = new List<Movimentacao>();
+
+            await using SqlConnection connection = _connectionFactory.Create();
+
+            await connection.OpenAsync();
+
+            await using SqlCommand command = new(
+                MovimentacaoQueries.Pesquisar,
+                connection);
+
+            command.CommandType = CommandType.Text;
+
+            command.Parameters.Add("@Tipo", SqlDbType.Int)
+                .Value = filtro.Tipo is null
+                    ? DBNull.Value
+                    : (int)filtro.Tipo;
+
+            command.Parameters.Add("@Categoria", SqlDbType.NVarChar, 100)
+                .Value = string.IsNullOrWhiteSpace(filtro.Categoria)
+                    ? DBNull.Value
+                    : filtro.Categoria;
+
+            command.Parameters.Add("@DataInicial", SqlDbType.DateTime)
+                .Value = filtro.DataInicial ?? (object)DBNull.Value;
+
+            command.Parameters.Add("@DataFinal", SqlDbType.DateTime)
+                .Value = filtro.DataFinal ?? (object)DBNull.Value;
+
+            await using SqlDataReader reader =
+                await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                movimentacoes.Add(MapearMovimentacao(reader));
+            }
+
+            return movimentacoes;
         }
     }
 }
