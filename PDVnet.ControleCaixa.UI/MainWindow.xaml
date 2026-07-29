@@ -6,258 +6,330 @@
         xmlns:local="clr-namespace:PDVnet.ControleCaixa.UI" xmlns:viewmodels="clr-namespace:PDVnet.ControleCaixa.UI.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MovimentacaoViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="20">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <!-- Dashboard -->
-            <RowDefinition Height="20"/>
+        <Grid Margin="20">
 
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
 
-            <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
 
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+                <RowDefinition Height="20"/>
 
-        <!-- DASHBOARD -->
+                <RowDefinition Height="Auto"/>
 
-        <Border
-        Grid.Row="0"
-        Grid.ColumnSpan="2"
-        Padding="15"
-        BorderBrush="LightGray"
-        BorderThickness="1"
-        CornerRadius="5">
+                <RowDefinition Height="20"/>
 
-            <Grid>
+                <RowDefinition Height="*"/>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            </Grid.RowDefinitions>
 
-                <!-- Saldo -->
+            <Border
+            Grid.Row="0"
+            Padding="15"
+            BorderBrush="LightGray"
+            BorderThickness="1"
+            CornerRadius="5">
 
-                <StackPanel>
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+
+                        <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Saldo Atual"/>
+
+                        <TextBlock
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Text="{Binding SaldoAtual,StringFormat={}{0:C2}}"/>
+
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+
+                        <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Movimentações"/>
+
+                        <TextBlock
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Text="{Binding TotalMovimentacoes}"/>
+
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+
+                        <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Status"/>
+
+                        <TextBlock
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Foreground="{Binding CorStatusCaixa}"
+                        Text="{Binding StatusCaixa}"/>
+
+                    </StackPanel>
+
+                </Grid>
+
+            </Border>
+
+            <GroupBox
+            Grid.Row="2"
+            Header="Cadastro de Movimentação">
+
+                <Grid Margin="10">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
                     <TextBlock
-                    FontWeight="SemiBold"
-                    Text="Saldo Atual"/>
+                    Grid.Row="0"
+                    Text="Descrição:"
+                    VerticalAlignment="Center"/>
+
+                    <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="5"
+                    IsEnabled="{Binding PodeEditar}"
+                    Text="{Binding Movimentacao.Descricao}"/>
 
                     <TextBlock
-                    FontSize="18"
-                    FontWeight="Bold"
-                    Text="{Binding SaldoAtual,
-                                   StringFormat={}{0:C2}}"/>
+                    Grid.Row="1"
+                    Text="Tipo:"
+                    VerticalAlignment="Center"/>
 
-                </StackPanel>
-
-                <!-- Total -->
-
-                <StackPanel Grid.Column="1">
-
-                    <TextBlock
-                    FontWeight="SemiBold"
-                    Text="Movimentações"/>
+                    <ComboBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="5"
+                    IsEnabled="{Binding PodeEditar}"
+                    ItemsSource="{Binding TiposMovimentacao}"
+                    SelectedItem="{Binding Movimentacao.Tipo}"/>
 
                     <TextBlock
-                    FontSize="18"
-                    FontWeight="Bold"
-                    Text="{Binding TotalMovimentacoes}"/>
+                    Grid.Row="2"
+                    Text="Categoria:"
+                    VerticalAlignment="Center"/>
 
-                </StackPanel>
-
-                <!-- Status -->
-
-                <StackPanel Grid.Column="2">
-
-                    <TextBlock
-                    FontWeight="SemiBold"
-                    Text="Status"/>
+                    <TextBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="5"
+                    IsEnabled="{Binding PodeEditar}"
+                    Text="{Binding Movimentacao.Categoria}"/>
 
                     <TextBlock
-                     FontSize="18"
-                     FontWeight="Bold"
-                     Foreground="{Binding CorStatusCaixa}"
-                     Text="{Binding StatusCaixa}" />
-                </StackPanel>
+                    Grid.Row="3"
+                    Text="Valor:"
+                    VerticalAlignment="Center"/>
 
-            </Grid>
+                    <TextBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Margin="5"
+                    PreviewTextInput="Valor_PreviewTextInput"
+                    IsEnabled="{Binding PodeEditar}"
+                    Text="{Binding Movimentacao.Valor}"/>
 
-        </Border>
+                    <StackPanel
+                    Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    Margin="0,15,0,0"
+                    Orientation="Horizontal">
 
-        <!-- Descrição -->
+                        <Button
+                        Width="170"
+                        Margin="0,0,10,0"
+                        Content="Nova Movimentação"
+                        Command="{Binding NovaMovimentacaoCommand}"
+                        IsEnabled="{Binding PodeCriarNovaMovimentacao}"/>
 
-        <TextBlock
-        Grid.Row="2"
-        Grid.Column="0"
-        Margin="0,0,10,0"
-        VerticalAlignment="Center"
-        Text="Descrição:"/>
+                        <Button
+                        Width="100"
+                        Margin="0,0,10,0"
+                        Content="Salvar"
+                        Command="{Binding SalvarCommand}"
+                        IsEnabled="{Binding MostrarSalvar}"/>
 
-        <TextBox
-        Grid.Row="2"
-        Grid.Column="1"
-        MinWidth="250"
-        Height="28"
-        Margin="0,0,0,10"
-        VerticalContentAlignment="Center"
-        IsEnabled="{Binding PodeEditar}"
-        Text="{Binding Movimentacao.Descricao,
-                       UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button
+                        Width="100"
+                        Margin="0,0,10,0"
+                        Content="Atualizar"
+                        Command="{Binding AtualizarCommand}"
+                        IsEnabled="{Binding MostrarAtualizar}"/>
 
-        <!-- Tipo -->
+                        <Button
+                        Width="100"
+                        Content="Excluir"
+                        Command="{Binding ExcluirCommand}"
+                        IsEnabled="{Binding MostrarExcluir}"/>
 
-        <TextBlock
-        Grid.Row="3"
-        Grid.Column="0"
-        Margin="0,0,10,0"
-        VerticalAlignment="Center"
-        Text="Tipo:"/>
+                    </StackPanel>
 
-        <ComboBox
-        Grid.Row="3"
-        Grid.Column="1"
-        MinWidth="250"
-        Height="28"
-        Margin="0,0,0,10"
-        VerticalContentAlignment="Center"
-        IsEnabled="{Binding PodeEditar}"
-        ItemsSource="{Binding TiposMovimentacao}"
-        SelectedItem="{Binding Movimentacao.Tipo}"/>
+                </Grid>
 
-        <!-- Categoria -->
+            </GroupBox>
 
-        <TextBlock
-        Grid.Row="4"
-        Grid.Column="0"
-        Margin="0,0,10,0"
-        VerticalAlignment="Center"
-        Text="Categoria:"/>
+            <GroupBox
+            Grid.Row="4"
+            Header="Filtros">
 
-        <TextBox
-        Grid.Row="4"
-        Grid.Column="1"
-        MinWidth="250"
-        Height="28"
-        Margin="0,0,0,10"
-        VerticalContentAlignment="Center"
-        IsEnabled="{Binding PodeEditar}"
-        Text="{Binding Movimentacao.Categoria,
-                       UpdateSourceTrigger=PropertyChanged}"/>
+                <Grid Margin="10">
 
-        <!-- Valor -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-        <TextBlock
-        Grid.Row="5"
-        Grid.Column="0"
-        Margin="0,0,10,0"
-        VerticalAlignment="Center"
-        Text="Valor:"/>
+                    <Grid.ColumnDefinitions>
 
-        <TextBox
-        Grid.Row="5"
-        Grid.Column="1"
-        MinWidth="250"
-        Height="28"
-        Margin="0,0,0,10"
-        VerticalContentAlignment="Center"
-        IsEnabled="{Binding PodeEditar}"
-        Text="{Binding Movimentacao.Valor,
-                       UpdateSourceTrigger=LostFocus}"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="180"/>
 
-        <!-- Botões -->
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="180"/>
 
-        <StackPanel
-        Grid.Row="6"
-        Grid.ColumnSpan="2"
-        Orientation="Horizontal">
+                    </Grid.ColumnDefinitions>
 
-            <Button
-            Width="170"
-            Height="28"
-            Margin="0,0,10,0"
-            Content="Nova Movimentação"
-            Command="{Binding NovaMovimentacaoCommand}"
-            IsEnabled="{Binding PodeCriarNovaMovimentacao}"/>
+                    <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Data Inicial"/>
 
-            <Button
-            Width="100"
-            Height="28"
-            Margin="0,0,10,0"
-            Content="Salvar"
-            Command="{Binding SalvarCommand}"
-            IsEnabled="{Binding MostrarSalvar}"/>
+                    <DatePicker
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="5"
+                    SelectedDate="{Binding DataInicial}"/>
 
-            <Button
-            Width="100"
-            Height="28"
-            Margin="0,0,10,0"
-            Content="Atualizar"
-            Command="{Binding AtualizarCommand}"
-            IsEnabled="{Binding MostrarAtualizar}"/>
+                    <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Text="Data Final"/>
 
-            <Button
-            Width="100"
-            Height="28"
-            Content="Excluir"
-            Command="{Binding ExcluirCommand}"
-            IsEnabled="{Binding MostrarExcluir}"/>
+                    <DatePicker
+                    Grid.Row="0"
+                    Grid.Column="3"
+                    Margin="5"
+                    SelectedDate="{Binding DataFinal}"/>
 
-        </StackPanel>
+                    <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Tipo"/>
 
-        <!-- DataGrid -->
+                    <ComboBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="5"
+                    ItemsSource="{Binding TiposFiltro}"
+                    SelectedItem="{Binding TipoFiltro}"
+                    DisplayMemberPath="Descricao"/>
 
-        <DataGrid
-        Grid.Row="8"
-        Grid.ColumnSpan="2"
-        Margin="0,10,0,0"
-        AutoGenerateColumns="False"
-        IsReadOnly="True"
-        ItemsSource="{Binding Movimentacoes}"
-        SelectedItem="{Binding MovimentacaoSelecionada}">
+                    <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Text="Categoria"/>
 
-            <DataGrid.Columns>
+                    <TextBox
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    Margin="5"
+                    Text="{Binding CategoriaFiltro}"/>
 
-                <DataGridTextColumn
-                Header="Descrição"
-                Binding="{Binding Descricao}"
-                Width="*"/>
+                    <StackPanel
+                    Grid.Row="2"
+                    Grid.ColumnSpan="4"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,15,0,0">
 
-                <DataGridTextColumn
-                Header="Tipo"
-                Binding="{Binding Tipo}"
-                Width="120"/>
+                        <Button
+                        Width="100"
+                        Margin="0,0,10,0"
+                        Content="Pesquisar"
+                        Command="{Binding PesquisarCommand}"/>
 
-                <DataGridTextColumn
-                Header="Categoria"
-                Binding="{Binding Categoria}"
-                Width="180"/>
+                        <Button
+                        Width="100"
+                        Content="Limpar"
+                        Command="{Binding LimparFiltrosCommand}"/>
 
-                <DataGridTextColumn
-                Header="Valor"
-                Binding="{Binding Valor, StringFormat={}{0:C2}}"
-                Width="120"/>
+                    </StackPanel>
 
-                <DataGridTextColumn
-                Header="Data Movimento"
-                Binding="{Binding DataMovimento, StringFormat=dd/MM/yyyy HH:mm}"
-                Width="170"/>
+                </Grid>
 
-            </DataGrid.Columns>
+            </GroupBox>
 
-        </DataGrid>
+            <DataGrid
+            Grid.Row="6"
+            Margin="0,10,0,0"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            ItemsSource="{Binding Movimentacoes}"
+            SelectedItem="{Binding MovimentacaoSelecionada}">
 
-    </Grid>
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn
+                    Header="Descrição"
+                    Binding="{Binding Descricao}"
+                    Width="*"/>
+
+                    <DataGridTextColumn
+                    Header="Tipo"
+                    Binding="{Binding Tipo}"
+                    Width="100"/>
+
+                    <DataGridTextColumn
+                    Header="Categoria"
+                    Binding="{Binding Categoria}"
+                    Width="180"/>
+
+                    <DataGridTextColumn
+                    Header="Valor"
+                    Binding="{Binding Valor,StringFormat={}{0:C2}}"
+                    Width="120"/>
+
+                    <DataGridTextColumn
+                    Header="Data Movimento"
+                    Binding="{Binding DataMovimento,StringFormat=dd/MM/yyyy HH:mm}"
+                    Width="170"/>
+
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+        </Grid>
+
+    </ScrollViewer>
 </Window>
