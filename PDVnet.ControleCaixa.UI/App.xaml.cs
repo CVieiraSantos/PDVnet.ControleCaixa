@@ -5,6 +5,7 @@ using PDVnet.ControleCaixa.UI.Services;
 using PDVnet.ControleCaixa.UI.ViewModels;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace PDVnet.ControleCaixa.UI;
 
@@ -17,11 +18,7 @@ public partial class App : Application
 
     public App()
     {
-        CultureInfo cultura = new("pt-BR");
 
-        CultureInfo.DefaultThreadCurrentCulture = cultura;
-        CultureInfo.DefaultThreadCurrentUICulture = cultura;
-        
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
@@ -34,10 +31,21 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
+        CultureInfo cultura = new("pt-BR");
+        CultureInfo.DefaultThreadCurrentCulture = cultura;
+        CultureInfo.DefaultThreadCurrentUICulture = cultura;
+
+        FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(
+                XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+
+        base.OnStartup(e);
+
         await _host.StartAsync();
 
         MainViewModel mainViewModel =
-       _host.Services.GetRequiredService<MainViewModel>();
+            _host.Services.GetRequiredService<MainViewModel>();
 
         await mainViewModel.InicializarAsync();
 
@@ -47,8 +55,6 @@ public partial class App : Application
         };
 
         mainWindow.Show();
-
-        base.OnStartup(e);
     }
 
     protected override async void OnExit(ExitEventArgs e)
