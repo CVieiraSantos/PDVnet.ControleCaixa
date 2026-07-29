@@ -70,5 +70,22 @@
                 END
             ), 0)
         FROM dbo.MovimentacaoCaixa;";
+
+        public const string Pesquisar = @"
+        SELECT
+            Id,
+            Descricao,
+            Tipo,
+            Categoria,
+            Valor,
+            DataMovimento,
+            Status
+        FROM dbo.MovimentacaoCaixa
+        WHERE Status = 1
+            AND (@Tipo IS NULL OR Tipo = @Tipo)
+            AND (@Categoria IS NULL OR Categoria LIKE '%' + @Categoria + '%')
+            AND (@DataInicial IS NULL OR DataMovimento >= @DataInicial)
+            AND (@DataFinal IS NULL OR DataMovimento < DATEADD(DAY, 1, @DataFinal))
+        ORDER BY DataMovimento DESC";
     }
 }
