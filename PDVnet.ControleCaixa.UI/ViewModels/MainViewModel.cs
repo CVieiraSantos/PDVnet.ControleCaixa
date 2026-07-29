@@ -4,7 +4,9 @@ using PDVnet.ControleCaixa.Business.Exceptions;
 using PDVnet.ControleCaixa.Business.Interfaces;
 using PDVnet.ControleCaixa.Model.Entities;
 using PDVnet.ControleCaixa.Model.Enums;
+using PDVnet.ControleCaixa.Model.Filters;
 using PDVnet.ControleCaixa.UI.Enums;
+using PDVnet.ControleCaixa.UI.Filtro;
 using PDVnet.ControleCaixa.UI.Mappings;
 using PDVnet.ControleCaixa.UI.Services;
 using System.Collections.ObjectModel;
@@ -40,6 +42,36 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
 
         [ObservableProperty]
         private int totalMovimentacoes;
+
+        [ObservableProperty]
+        private DateTime? dataInicial;
+
+        [ObservableProperty]
+        private DateTime? dataFinal;
+
+        [ObservableProperty]
+        private ItemFiltroTipo? tipoFiltro;
+        public IReadOnlyList<ItemFiltroTipo> TiposFiltro { get; } =
+        [
+            new()
+            {
+                Descricao = "Todos",
+                Tipo = null
+            },
+            new()
+            {
+                Descricao = "Entrada",
+                Tipo = TipoMovimentacao.Entrada
+            },
+            new()
+            {
+                Descricao = "Saída",
+                Tipo = TipoMovimentacao.Saida
+            }
+        ];
+
+        [ObservableProperty]
+        private string? categoriaFiltro;
 
         public string StatusCaixa
         {
@@ -108,6 +140,35 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
             LimparFormulario();
 
             EstadoTela = EstadoTela.Cadastro;
+        }
+
+        [RelayCommand]
+        private async Task PesquisarAsync()
+        {
+            MovimentacaoFiltro filtro = CriarFiltro();
+
+            IReadOnlyList<Movimentacao> lista =
+                await _movimentacaoService.PesquisarAsync(filtro);
+
+            Movimentacoes.Clear();
+
+            foreach (Movimentacao item in lista)
+            {
+                Movimentacoes.Add(MovimentacaoMapper.ToViewModel(item));
+            }
+
+            await AtualizarSaldoAsync();
+        }
+
+        [RelayCommand]
+        private async Task LimparFiltrosAsync()
+        {
+            DataInicial = null;
+            DataFinal = null;
+            TipoFiltro = null;
+            CategoriaFiltro = null;
+
+            await AtualizarTelaAsync(false);
         }
 
         [RelayCommand]
@@ -269,6 +330,17 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
             Movimentacao = MovimentacaoMapper.Clone(value);
 
             EstadoTela = EstadoTela.Edicao;
+        }
+
+        private MovimentacaoFiltro CriarFiltro()
+        {
+            return new MovimentacaoFiltro
+            {
+                DataInicial = DataInicial,
+                DataFinal = DataFinal,
+                Tipo = TipoFiltro?.Tipo,
+                Categoria = CategoriaFiltro
+            };
         }
     }
 }
