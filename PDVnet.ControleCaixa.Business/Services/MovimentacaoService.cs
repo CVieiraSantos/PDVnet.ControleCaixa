@@ -3,6 +3,7 @@ using PDVnet.ControleCaixa.Business.Interfaces;
 using PDVnet.ControleCaixa.Business.Validators;
 using PDVnet.ControleCaixa.Data.Repositories.Interfaces;
 using PDVnet.ControleCaixa.Model.Entities;
+using PDVnet.ControleCaixa.Model.Filters;
 
 namespace PDVnet.ControleCaixa.Business.Services
 {
@@ -70,6 +71,11 @@ namespace PDVnet.ControleCaixa.Business.Services
         public async Task<IReadOnlyList<Movimentacao>> ObterTodasAsync()
         {
             return await _repository.ObterTodasAsync();
+        }
+
+        public async Task<IReadOnlyList<Movimentacao>> PesquisarAsync(MovimentacaoFiltro filtro)
+        {
+            return await _repository.PesquisarAsync(filtro);
         }
     }
 }
