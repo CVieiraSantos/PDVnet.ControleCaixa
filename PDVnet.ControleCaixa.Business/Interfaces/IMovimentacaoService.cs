@@ -1,4 +1,5 @@
 ﻿using PDVnet.ControleCaixa.Model.Entities;
+using PDVnet.ControleCaixa.Model.Filters;
 
 namespace PDVnet.ControleCaixa.Business.Interfaces
 {
@@ -15,5 +16,7 @@ namespace PDVnet.ControleCaixa.Business.Interfaces
         Task<Movimentacao?> ObterPorIdAsync(int id);
 
         Task<decimal> ObterSaldoAsync();
+        
+        Task<IReadOnlyList<Movimentacao>> PesquisarAsync(MovimentacaoFiltro filtro);
     }
 }
