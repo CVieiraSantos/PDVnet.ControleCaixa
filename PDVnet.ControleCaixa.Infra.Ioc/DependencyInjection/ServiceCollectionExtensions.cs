@@ -15,6 +15,8 @@ namespace PDVnet.ControleCaixa.Infra.Ioc.DependencyInjection
                 services.AddSingleton<IConnectionFactory, SqlConnectionFactory>();
                 services.AddScoped<IMovimentacaoRepository, MovimentacaoRepository>();
                 services.AddScoped<IMovimentacaoService, MovimentacaoService>();
+                services.AddScoped<IParametroCaixaRepository, ParametroCaixaRepository>();
+                services.AddScoped<IParametroCaixaService, ParametroCaixaService>();
                 return services;
             }
         }
