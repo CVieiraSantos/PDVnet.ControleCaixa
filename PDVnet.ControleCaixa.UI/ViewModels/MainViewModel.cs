@@ -17,11 +17,13 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
     public partial class MainViewModel : ViewModelBase
     {
         private readonly IMovimentacaoService _movimentacaoService;
+        private readonly IParametroCaixaService _parametroCaixaService;
         private readonly INotificationService _notificationService;
 
-        public MainViewModel(IMovimentacaoService movimentacaoService, INotificationService notificationService)
+        public MainViewModel(IMovimentacaoService movimentacaoService,IParametroCaixaService parametroCaixaService,INotificationService notificationService)
         {
             _movimentacaoService = movimentacaoService;
+            _parametroCaixaService = parametroCaixaService;
             _notificationService = notificationService;
 
             Movimentacao = CriarNovaMovimentacao();
@@ -39,6 +41,11 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
         [NotifyPropertyChangedFor(nameof(CorStatusCaixa))]
         [ObservableProperty]
         private decimal saldoAtual;
+
+        [NotifyPropertyChangedFor(nameof(StatusCaixa))]
+        [NotifyPropertyChangedFor(nameof(CorStatusCaixa))]
+        [ObservableProperty]
+        private decimal saldoMinimo = 100m;
 
         [ObservableProperty]
         private int totalMovimentacoes;
@@ -77,8 +84,8 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
         {
             get
             {
-                return SaldoAtual < 100
-                    ? "Saldo abaixo de R$ 100,00"
+                return SaldoAtual < SaldoMinimo
+                    ? $"Saldo abaixo de {SaldoMinimo:C2}"
                     : "Caixa saudável";
             }
         }
@@ -87,7 +94,7 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
         {
             get
             {
-                return SaldoAtual < 100
+                return SaldoAtual < SaldoMinimo
                     ? Brushes.Red
                     : Brushes.Green;
             }
@@ -127,6 +134,8 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
 
         public async Task InicializarAsync()
         {
+            SaldoMinimo = await _parametroCaixaService.ObterSaldoMinimoAsync();
+
             await AtualizarTelaAsync();
         }
 
@@ -140,6 +149,25 @@ namespace PDVnet.ControleCaixa.UI.ViewModels
             LimparFormulario();
 
             EstadoTela = EstadoTela.Cadastro;
+        }
+
+        [RelayCommand]
+        private async Task AtualizarSaldoMinimoAsync()
+        {
+            try
+            {
+                await _parametroCaixaService.AtualizarSaldoMinimoAsync(SaldoMinimo);
+
+                _notificationService.Information("Saldo mínimo de alerta atualizado com sucesso.");
+            }
+            catch (ValidacaoException ex)
+            {
+                _notificationService.Warning(ex.Message);
+            }
+            catch (Exception)
+            {
+                _notificationService.Error("Ocorreu um erro ao atualizar o saldo mínimo.");
+            }
         }
 
         [RelayCommand]
